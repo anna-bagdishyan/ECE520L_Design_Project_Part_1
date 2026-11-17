@@ -92,7 +92,7 @@ module tb_spi_master;
         $finish;
     end
 
-    // Test 2 - 0xA5C3
+    // Test 2.1 - Transmit 0xA5C3, receive 0x1940
     clk_div = 8'd2;
     spi_en = 1;
     tx_data = 16'hA5C3;
@@ -120,22 +120,39 @@ module tb_spi_master;
         $finish;
     end
 
-    // 16 bit transmitted MSB first
-     for (i = 0; i < 16; i = i + 1) begin
-        @(posedge sys_clk);
+    // Test 2.2 - asserting start when busy is high
+    start = 1;
+    @(posedge sys_clk);
+    #1;
+    start = 0;
+
+    if (busy != 1'b1) begin
+        $display("FAILED: Transfer should continue when start is asserted");
+        $finish;
+    end
+
+    // transmitting 0xA5C3 and receving 0x1940
+    for (i = 0; i < 16; i = i + 1) begin
+        @(negedge sclk);
+        #1;
+        miso = (16'h1940 >> (15-i)) & 1'b1; // shifts desired bit to position, extracts it, and assigns to miso
+
+        @(posedge sclk);
         #1;
 
+        // verify transmitted bit
         if (mosi != tx_data[15-i]) begin
             $display("FAILED: MOSI incorrect at bit %0d", i);
             $finish;
         end
 
+        // chip select should remain low
         if (cs_n != 1'b0) begin
             $display("FAILED: cs_n should remain 0 during transfer");
             $finish;
         end
     end
-
+    
     // cs_n should remain low after final rising edge
     @(posedge sys_clk);
     #1;
@@ -145,14 +162,87 @@ module tb_spi_master;
         $finish;
     end
 
-    // Test 3 - 0x1940
-    clk_div = 8'd2;
-    spi_en = 1;
+    if (rx_data != 16'h1940) begin
+        $display("FAILED: rx_data should be 0x1940");
+        $finish;
+    end
+    
+    if (done != 1'b1) begin
+    $display("FAILED: done should be 1");
+    $finish;
+    end
+
+    // Test 3 - perform back to back transfers
+    @(posedge sys_clk);
+    #1;
+
+    // idle period of 5 clock cycles
+    for (i = 0; i < 5; i = i + 1) begin
+        @(posedge sys_clk);
+        #1;
+
+        if (sclk != 1'b1 || cs_n != 1'b1) begin
+            $display("FAILED: sclk and cs_n should be 1 during IDLE period b/w two transfers");
+            $finish;
+        end
+    end
+
+    // second transfer
     tx_data = 16'hA5C3;
     start = 1;
+    miso = 0;
 
+    @(posedge sys_clk);
+    #1;
+    start = 0;
+
+    if (busy != 1'b1) begin
+        $display("FAILED: Second transfer should begin");
+        $finish;
+    end
+
+    @(posedge sys_clk);
+    #1;
     
+    // verify second transfer
+    for (i = 0; i < 16; i = i + 1) begin
+        @(posedge sclk);
+        #1;
 
+        if (mosi != tx_data[15-i]) begin
+            $display("FAILED: MOSI incorrect during second transfer");
+            $finish;
+        end
+    end
+
+    @(posedge sys_clk);
+    #1;
+    
+    if (done != 1'b1) begin
+        $display("FAILED: Second transfer should complete");
+        $finish;
+    end
+
+    @(posedge sys_clk);
+    #1;
+    
+    // Test 4 - spi_en = 0 and 
+    spi_en = 0;
+    start = 1;
+
+    @(posedge sys_clk);
+    #1;
+
+    if (busy != 1'b0) begin
+        $display("FAILED: No transfer should begin");
+        $finish;
+    end
+
+    if (cs_n != 1'b1) begin
+        $display("FAILED: No transfer should begin");
+        $finish;
+    end
+ 
 
     $display("TEST PASSED");
     $finish;

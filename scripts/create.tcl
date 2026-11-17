@@ -1,15 +1,11 @@
+
 set proj_name design_project1_ab
 set current_dir [file normalize [file dirname [info script]]]
 set repo_dir [file dirname $current_dir]
-set proj_dir [file join $repo_dir sc_fifo]
-
-set input_data_path [file join $repo_dir sim input_data.txt]
-if {![file exists $input_data_path]} {
-    error "sim/input_data.txt not found at $input_data_path. Run scripts/generate_sc_fifo_data.py first."
-}
+set proj_dir [file join $repo_dir $proj_name]
 
 if {[file exists $proj_dir]} {
-    error "proj/ already exists at $proj_dir. Remove it before re-running this script."
+    error "Project directory already exists at $proj_dir. Remove it before re-running this script."
 }
 
 create_project $proj_name $proj_dir -part xc7z010clg400-1
@@ -22,18 +18,11 @@ if {$board_part ne ""} {
 
 set src_files [glob -nocomplain [file join $repo_dir src *.v]]
 add_files -norecurse $src_files
-set_property top sc_fifo [current_fileset]
-
-set ip_files [glob -nocomplain [file join $repo_dir src *.xci]]
-add_files -norecurse $ip_files
+set_property top spi_master [current_fileset]
 
 set sim_files [glob -nocomplain [file join $repo_dir sim *.v]]
 add_files -fileset sim_1 -norecurse $sim_files
-set_property top tb_sc_fifo [get_filesets sim_1]
+set_property top tb_spi_master [get_filesets sim_1]
 
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
-
-set sim_run_dir [file join $proj_dir "$proj_name.sim" sim_1 behav xsim]
-file mkdir $sim_run_dir
-file copy -force $input_data_path $sim_run_dir
