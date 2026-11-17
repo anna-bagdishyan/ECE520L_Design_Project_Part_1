@@ -6,9 +6,9 @@
 // Author     : Anna Bagdishyan 203475460
 // Company    : CSUN
 // Created    : 2026-11-13
-// Last update: 2026-11-15
+// Last update: 2026-11-16
 // Platform   :
-// Standard   : SystemVerilog
+// Standard   : Verilog
 //////////////////////////////////////////////////////////////////////////////////
 // Description: Top file for spi_master.v
 //////////////////////////////////////////////////////////////////////////////////
@@ -28,8 +28,8 @@ module spi_master (
     output wire [15:0] rx_data,
     output wire busy,
     output wire done
-
 );
+
     wire fall_en;
     wire rise_en;
     wire clk_div_en;
