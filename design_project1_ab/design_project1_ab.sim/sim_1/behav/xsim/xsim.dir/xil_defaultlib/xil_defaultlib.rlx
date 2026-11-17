@@ -1,0 +1,15 @@
+0.7
+2020.2
+May  7 2023
+15:24:31
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/design_project1_ab/design_project1_ab.sim/sim_1/behav/xsim/glbl.v,1683266558,verilog,,,,glbl,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/sim/tb_spi_clk_div.v,1794899746,verilog,,,,tb_spi_clk_div,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/sim/tb_spi_cs_ctrl.v,1794899746,verilog,,,,tb_spi_cs_ctrl,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/sim/tb_spi_fsm.v,1794899746,verilog,,,,tb_spi_fsm,,,,,,,,
+,,,,,,tb_spi_master,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/sim/tb_spi_shift_reg.v,1794899746,verilog,,,,tb_spi_shift_reg,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_clk_div.v,1794900564,verilog,,C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_cs_ctrl.v,,spi_clk_div,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_cs_ctrl.v,1794899746,verilog,,C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_fsm.v,,spi_cs_ctrl,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_fsm.v,1794899746,verilog,,C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_master.v,,spi_fsm,,,,,,,,
+,,,,C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_shift_reg.v,,spi_master,,,,,,,,
+C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/src/spi_shift_reg.v,1794899746,verilog,,C:/ECE520/Vivado/ECE520L_Design_Project_Part_1/sim/tb_spi_master.v,,spi_shift_reg,,,,,,,,
